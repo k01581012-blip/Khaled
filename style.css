@@ -661,32 +661,34 @@ body.is-on .portfolio-container {
     overflow-y: auto;
   }
 
-  /* حالة الإغلاق: الأباجورة بحجم كبير وواضح في منتصف الشاشة */
+  /* حالة الإغلاق: الأباجورة بحجم كبير وواضح ومركزة في منتصف الشاشة */
   .lamp-wrapper {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50% !important;
     transform: translate(-50%, -50%);
     transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
     margin: 0;
-    z-index: 20;
+    z-index: 100;
   }
 
   .lamp {
-    height: 55vmin;
+    height: 60vmin;
+    min-height: 280px; /* ضمان حجم كبير وسهل اللمس على جميع الموبايلات */
     transition: height 0.8s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
-  /* حالة الفتح (is-on): تصغر الأباجورة وتنتقل بسلاسة للزاوية العلوية اليسرى */
+  /* حالة الفتح (is-on): تصغر الأباجورة وتنتقل بسلاسة وثبات للزاوية العلوية اليسرى */
   body.is-on .lamp-wrapper {
-    position: absolute;
-    top: 15px;
-    left: 15px !important;
+    position: fixed;
+    top: 10px;
+    left: 10px !important;
     transform: none;
   }
 
   body.is-on .lamp {
-    height: 15vmin;
+    height: 18vmin;
+    min-height: 75px; /* حجم واضح وثابت فوق البورتفوليو */
   }
 
   /* البورتفوليو يظهر كاملاً أسفلها بمساحة مريحة للتصفح */
@@ -699,13 +701,13 @@ body.is-on .portfolio-container {
     max-width: 100%;
     height: auto;
     max-height: none;
-    margin: 20px auto;
+    margin: 0 auto 30px auto;
     flex-direction: column;
-    transition: all 0.8s ease-in-out;
+    transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out, margin-top 0.8s ease-in-out;
   }
 
   body.is-on .portfolio-container {
-    margin-top: calc(15vmin + 35px);
+    margin-top: 95px; /* مسافة مريحة لكي يظهر البورتفوليو أسفل الأباجورة تماماً */
   }
 
   .profile-card {
@@ -731,6 +733,6 @@ body.is-on .portfolio-container {
   }
 
   .skills-grid {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
   }
 }
