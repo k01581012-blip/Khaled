@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Khaled Mohamed Nsr - Portfolio</title>
+  <link rel="stylesheet" href="https://public.codepenassets.com/css/normalize-5.0.0.min.css">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="apple-touch-icon" href="https://codetap.org/assets/img/favicon.png">
+  <link rel="icon" type="image/png" href="https://codetap.org/assets/img/favicon.png">
+
+  <style>
+    /* --- تأثيرات تكبير الصور وتفاعلها --- */
+    .project-gallery img,
+    .project-img img,
+    .avatar {
+      cursor: pointer;
+      transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), filter 0.3s ease;
+    }
+
+    .project-gallery img:hover,
+    .project-img img:hover {
+      transform: scale(1.06);
+      filter: brightness(1.1);
+    }
+
+    /* --- نافذة تكبير الصور (Lightbox Modal) --- */
+    .lightbox-modal {
+      display: none;
+      position: fixed;
+      z-index: 99999;
+      padding-top: 40px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(8px);
+    }
+
+    .lightbox-content {
+      margin: auto;
+      display: block;
+      max-width: 90%;
+      max-height: 80vh;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      animation: zoomAnimation 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    #lightbox-caption {
+      margin: 15px auto;
+      text-align: center;
+      color: #e0e0e0;
+      font-size: 1rem;
+      max-width: 80%;
+      font-family: inherit;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 35px;
+      color: #fff;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .lightbox-close:hover {
+      color: #ff4a4a;
+    }
+
+    @keyframes zoomAnimation {
+      from { transform: scale(0.85); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- خلفية شبكة الـ PCB التفاعلية (النقط الذهبية) -->
+  <canvas id="pcb-bg"></canvas>
+
+  <!-- حاوية الأباجورة التفاعلية -->
+  <div class="lamp-wrapper">
+    <form>
+      <input type="radio" id="on" name="status" value="on">
+      <label for="on">On</label>
+      <input type="radio" id="off" name="status" value="off">
+      <label for="off">Off</label>
+      <svg class="lamp" viewBox="0 0 333 484" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g class="lamp__shade shade">
+          <ellipse class="shade__opening" cx="165" cy="220" rx="130" ry="20" />
+          <ellipse class="shade__opening-shade" cx="165" cy="220" rx="130" ry="20" fill="url(#opening-shade)" />
+        </g>
+        <g class="lamp__base base">
+          <path class="base__side"
+            d="M165 464c44.183 0 80-8.954 80-20v-14h-22.869c-14.519-3.703-34.752-6-57.131-6-22.379 0-42.612 2.297-57.131 6H85v14c0 11.046 35.817 20 80 20z" />
+          <path
+            d="M165 464c44.183 0 80-8.954 80-20v-14h-22.869c-14.519-3.703-34.752-6-57.131-6-22.379 0-42.612 2.297-57.131 6H85v14c0 11.046 35.817 20 80 20z"
+            fill="url(#side-shading)" />
+          <ellipse class="base__top" cx="165" cy="430" rx="80" ry="20" />
+          <ellipse cx="165" cy="430" rx="80" ry="20" fill="url(#base-shading)" />
+        </g>
+        <g class="lamp__post post">
+          <path class="post__body" d="M180 142h-30v286c0 3.866 6.716 7 15 7 8.284 0 15-3.134 15-7V142z" />
+          <path d="M180 142h-30v286c0 3.866 6.716 7 15 7 8.284 0 15-3.134 15-7V142z" fill="url(#post-shading)" />
+        </g>
+        <g class="lamp__cords cords">
+          <path class="cord cord--rig" d="M124 187.033V347" stroke-width="6" stroke-linecap="round" />
+          <path class="cord cord--rig"
+            d="M124 187.023s17.007 21.921 17.007 34.846c0 12.925-11.338 23.231-17.007 34.846-5.669 11.615-17.007 21.921-17.007 34.846 0 12.925 17.007 34.846 17.007 34.846"
+            stroke-width="6" stroke-linecap="round" />
+          <path class="cord cord--rig"
+            d="M124 187.017s-21.259 17.932-21.259 30.26c0 12.327 14.173 20.173 21.259 30.26 7.086 10.086 21.259 17.933 21.259 30.26 0 12.327-21.259 30.26-21.259 30.26"
+            stroke-width="6" stroke-linecap="round" />
+          <path class="cord cord--rig"
+            d="M124 187s29.763 8.644 29.763 20.735-19.842 13.823-29.763 20.734c-9.921 6.912-29.763 8.644-29.763 20.735S124 269.939 124 269.939"
+            stroke-width="6" stroke-linecap="round" />
+          <path class="cord cord--rig"
+            d="M124 187.029s-10.63 26.199-10.63 39.992c0 13.794 7.087 26.661 10.63 39.992 3.543 13.331 10.63 26.198 10.63 39.992 0 13.793-10.63 39.992-10.63 39.992"
+            stroke-width="6" stroke-linecap="round" />
+          <path class="cord cord--rig" d="M124 187.033V347" stroke-width="6" stroke-linecap="round" />
+          <line class="cord cord--dummy" x1="124" y2="348" x2="124" y1="190" stroke-width="6" stroke-linecap="round" />
+        </g>
+        <path class="lamp__light" d="M290.5 193H39L0 463.5c0 11.046 75.478 20 165.5 20s167-11.954 167-23l-42-267.5z"
+          fill="url(#light)" />
+        <g class="lamp__top top">
+          <path class="top__body" fill-rule="evenodd" clip-rule="evenodd"
+            d="M164.859 0c55.229 0 100 8.954 100 20l29.859 199.06C291.529 208.451 234.609 200 164.859 200S38.189 208.451 35 219.06L64.859 20c0-11.046 44.772-20 100-20z" />
+          <path class="top__shading" fill-rule="evenodd" clip-rule="evenodd"
+            d="M164.859 0c55.229 0 100 8.954 100 20l29.859 199.06C291.529 208.451 234.609 200 164.859 200S38.189 208.451 35 219.06L64.859 20c0-11.046 44.772-20 100-20z"
+            fill="url(#top-shading)" />
+        </g>
+        <g class="lamp__face face">
+          <g class="lamp__mouth">
+            <path d="M165 178c19.882 0 36-16.118 36-36h-72c0 19.882 16.118 36 36 36z" fill="#141414" />
+            <clipPath class="lamp__feature" id="mouth" x="129" y="142" width="72" height="36">
+              <path d="M165 178c19.882 0 36-16.118 36-36h-72c0 19.882 16.118 36 36 36z" fill="#141414" />
+            </clipPath>
+            <g clip-path="url(#mouth)">
+              <circle class="lamp__tongue" cx="179.4" cy="172.6" r="18" />
+            </g>
+          </g>
+          <g class="lamp__eyes">
+            <path class="lamp__eye lamp__stroke" d="M115 135c0-5.523-5.82-10-13-10s-13 4.477-13 10" stroke-width="4"
+              stroke-linecap="round" stroke-linejoin="round" />
+            <path class="lamp__eye lamp__stroke" d="M241 135c0-5.523-5.82-10-13-10s-13 4.477-13 10" stroke-width="4"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </g>
+        </g>
+        <defs>
+          <linearGradient id="opening-shade" x1="35" y1="220" x2="295" y2="220" gradientUnits="userSpaceOnUse">
+            <stop />
+            <stop offset="1" stop-color="var(--shade)" stop-opacity="0" />
+          </linearGradient>
+          <linearGradient id="base-shading" x1="85" y1="444" x2="245" y2="444" gradientUnits="userSpaceOnUse">
+            <stop stop-color="var(--b-1)" />
+            <stop offset="0.8" stop-color="var(--b-2)" stop-opacity="0" />
+          </linearGradient>
+          <linearGradient id="side-shading" x1="119" y1="430" x2="245" y2="430" gradientUnits="userSpaceOnUse">
+            <stop stop-color="var(--b-3)" />
+            <stop offset="1" stop-color="var(--b-4)" stop-opacity="0" />
+          </linearGradient>
+          <linearGradient id="post-shading" x1="150" y1="288" x2="180" y2="288" gradientUnits="userSpaceOnUse">
+            <stop stop-color="var(--b-1)" />
+            <stop offset="1" stop-color="var(--b-2)" stop-opacity="0" />
+          </linearGradient>
+          <linearGradient id="light" x1="165.5" y1="218.5" x2="165.5" y2="483.5" gradientUnits="userSpaceOnUse">
+            <stop stop-color="var(--l-1)" stop-opacity=".2" />
+            <stop offset="1" stop-color="var(--l-2)" stop-opacity="0" />
+          </linearGradient>
+          <linearGradient id="top-shading" x1="56" y1="110" x2="295" y2="110" gradientUnits="userSpaceOnUse">
+            <stop stop-color="var(--t-1)" stop-opacity=".8" />
+            <stop offset="1" stop-color="var(--t-2)" stop-opacity="0" />
+          </linearGradient>
+        </defs>
+        <circle class="lamp__hit" cx="124" cy="347" r="66" fill="#C4C4C4" fill-opacity=".1" />
+      </svg>
+    </form>
+  </div>
+
+  <!-- البورتفوليو المقسم إلى تبويبات وتخطيط الجدول -->
+  <div class="portfolio-container">
+    
+    <!-- الكارت الجانبي (Profile Card) -->
+    <aside class="profile-card">
+      <div class="avatar-box">
+        <img src="https://i.ibb.co/Q7vMF7yP/Whats-App-Image-2026-07-08-at-5-23-09-AM.jpg" alt="Khaled Mohamed Nsr" class="avatar">
+      </div>
+      <h2 class="name">Khaled Mohamed Nsr</h2>
+      <span class="badge">Electronics & Communications Engineer</span>
+
+      <hr class="divider">
+
+      <ul class="contacts-list">
+        <li class="contact-item">
+          <div class="icon-box">📧</div>
+          <div class="contact-info">
+            <span class="title">EMAIL</span>
+            <a href="mailto:k01581012@gmail.com" class="value">k01581012@gmail.com</a>
+          </div>
+        </li>
+
+        <li class="contact-item">
+          <div class="icon-box">🔗</div>
+          <div class="contact-info">
+            <span class="title">LINKEDIN</span>
+            <a href="https://www.linkedin.com/in/khaled-nsr" target="_blank" class="value">Khaled Nsr</a>
+          </div>
+        </li>
+
+        <li class="contact-item">
+          <div class="icon-box">🎓</div>
+          <div class="contact-info">
+            <span class="title">EDUCATION</span>
+            <span class="value">New Cairo Academy</span>
+          </div>
+        </li>
+
+        <li class="contact-item">
+          <div class="icon-box">📍</div>
+          <div class="contact-info">
+            <span class="title">LOCATION</span>
+            <span class="value">Cairo, Egypt</span>
+          </div>
+        </li>
+      </ul>
+
+      <a href="https://www.linkedin.com/in/khaled-nsr" target="_blank" class="btn-stay-in-touch" style="text-decoration: none; display: inline-block; text-align: center;">STAY IN TOUCH ↗</a>
+    </aside>
+
+    <!-- المنطقة الرئيسية -->
+    <main class="main-content">
+
+      <!-- شريط التنقل بين التبويبات -->
+      <nav class="navbar">
+        <button class="nav-btn active" data-tab="about">About</button>
+        <button class="nav-btn" data-tab="resume">Resume</button>
+        <button class="nav-btn" data-tab="portfolio">Portfolio</button>
+        <button class="nav-btn" data-tab="contact">Contact</button>
+      </nav>
+
+      <!-- تبويب ABOUT -->
+      <section class="tab-content active" id="tab-about">
+        <h2 class="section-title">About Me</h2>
+        
+        <div class="about-text">
+          <p>Hi there, 👋</p>
+          <p>I'm <strong>Khaled Mohamed Nsr</strong> — an Electronics & Communications Engineer focused on bridging the gap between physical hardware, wireless communication, and intelligent software architecture.</p>
+          <p>My engineering journey combines hands-on expertise in Embedded Systems (AVR, ESP32, Embedded C/C++), PCB Design, IoT, and Wireless Communication (LoRaWAN, MQTT) with AI-driven Automation using Python, n8n, RAG, and LLMs. I also work with AWS Cloud, Networking, and UI/UX design for automation systems.</p>
+          <p>I've worked on multidisciplinary projects including real-time Radar target detection systems, AI-powered robotics, LoRaWAN communication systems, IoT solutions, PCB-based embedded systems, and AI-driven workflow automation pipelines.</p>
+          <p>From optimizing wireless frame transmission and building intelligent embedded systems to designing automation interfaces and connecting AI with real-world workflows, I specialize in turning complex multidisciplinary concepts into practical, reliable, and scalable engineering solutions.</p>
+        </div>
+
+        <h3 class="subsection-title">Core Areas</h3>
+        <div class="services-grid">
+          <div class="service-card">
+            <span class="service-icon">🔌</span>
+            <div>
+              <h4>Embedded Systems & IoT</h4>
+              <p>ESP32, AVR, Embedded C/C++, PCB Design, and custom hardware integration.</p>
+            </div>
+          </div>
+          <div class="service-card">
+            <span class="service-icon">📡</span>
+            <div>
+              <h4>Wireless Communication</h4>
+              <p>LoRaWAN, MQTT, Radar Systems, and RF telemetry optimization.</p>
+            </div>
+          </div>
+          <div class="service-card">
+            <span class="service-icon">🤖</span>
+            <div>
+              <h4>AI & Workflow Automation</h4>
+              <p>Python, n8n, API Integration, RAG, LLM applications, and multi-model engines.</p>
+            </div>
+          </div>
+          <div class="service-card">
+            <span class="service-icon">⚡</span>
+            <div>
+              <h4>Cloud, Networking & UI/UX</h4>
+              <p>AWS Cloud, CCNA Enterprise Networking, and UI/UX design for automation systems.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- تبويب RESUME -->
+      <section class="tab-content" id="tab-resume">
+        <h2 class="section-title">Resume</h2>
+
+        <h3 class="subsection-title">💼 Work Experience & Professional Training</h3>
+        <div class="timeline">
+          <div class="timeline-item">
+            <h4>Automation & Workflow Engineer</h4>
+            <span class="company">NBD (Full-time)</span>
+            <span class="date">Mar 2026 — Present</span>
+            <p>Architecting multi-agent n8n workflows, custom REST API webhooks, and AI-driven data automation pipelines.</p>
+          </div>
+          
+          <div class="timeline-item">
+            <h4>Embedded Systems & IoT Engineer</h4>
+            <span class="company">Leader Company (4 Months Internship + 1 Year Full-time Work)</span>
+            <span class="date">Apr 2025 — Aug 2026</span>
+            <p>Completed 4 months of intensive practical engineering training followed by 1 year of full-time engineering work focused on Printed Circuit Board (PCB) design & troubleshooting, Uninterruptible Power Supply (UPS) systems maintenance, and Softstarter motor control automation.</p>
+            <div class="project-gallery" style="display: flex; gap: 8px; margin-top: 10px;">
+              <a href="https://ibb.co/LDVChM1z" target="_blank" onclick="event.preventDefault();">
+                <img src="https://i.ibb.co/9mQq3JW9/IMG-20260512-210055.png" alt="Leader Company Experience Certificate" style="width: 110px; height: 80px; object-fit: cover; border-radius: 6px;">
+              </a>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <h4>Embedded Software Engineer</h4>
+            <span class="company">Afaq Company (Full-time)</span>
+            <span class="date">2024 — 2025</span>
+            <p>Focused on AVR microcontrollers, hardware interfacing, circuit troubleshooting, and serial communication (UART/SPI/I2C).</p>
+          </div>
+        </div>
+
+        <h3 class="subsection-title">🏆 Honors & Leadership</h3>
+        <div class="timeline">
+          <div class="timeline-item">
+            <h4>1st Place & Best Member — CCNA Enterprise Networking</h4>
+            <span class="company">IEEE Student Branch</span>
+            <p>Achieved 1st place in CCNA Enterprise network design competition and awarded "Best Member" for technical performance and leadership.</p>
+            <div class="project-gallery" style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
+              <img src="https://i.ibb.co/TqxGtnCs/IMG-20251216-WA0013.jpg" alt="IEEE First Place Certificate" style="width: 110px; height: 80px; object-fit: cover; border-radius: 6px;">
+              <img src="https://i.ibb.co/7J69drRn/IMG20260808210824.jpg" alt="Best Member Award Certificate" style="width: 110px; height: 80px; object-fit: cover; border-radius: 6px;">
+              <img src="https://i.ibb.co/hj0rHHG/file-00000000b26081f6a39f5e9f6f64cdfa.png" alt="Khaled Nsr Receiving Award" style="width: 110px; height: 80px; object-fit: cover; border-radius: 6px;">
+            </div>
+          </div>
+          
+          <div class="timeline-item">
+            <h4>Youth Speaker & Technical Instructor</h4>
+            <span class="company">UNICEF Supported Initiative ("Meshwari" Project)</span>
+            <p>Delivered technical workshops and motivational sessions on technology, engineering pathways, and personal growth for young innovators.</p>
+            <div class="project-gallery" style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
+              <img src="https://i.ibb.co/KcJmWbZZ/1766690609574.png" alt="UNICEF Certificate" style="width: 110px; height: 80px; object-fit: cover; border-radius: 6px;">
+              <img src="https://i.ibb.co/1tz0t0Zh/IMG-20251022-WA0040.jpg" alt="Khaled Nsr Speaking at UNICEF Event" style="width: 130px; height: 80px; object-fit: cover; border-radius: 6px;">
+            </div>
+          </div>
+        </div>
+
+        <h3 class="subsection-title">🎓 Education & Certifications</h3>
+        <div class="timeline">
+          <div class="timeline-item">
+            <h4>New Cairo Academy</h4>
+            <span class="company">B.Sc. in Electrical, Electronics & Communications Engineering</span>
+            <span class="date">2023 — Present</span>
+          </div>
+          <div class="timeline-item">
+            <h4>AWS Certified Solutions Architect & Cloud Architecture</h4>
+            <span class="company">Amazon Web Services (AWS)</span>
+            <p>Certified in designing resilient, highly available, cost-optimized, and secure AWS Cloud architectures.</p>
+            <div class="project-gallery" style="display: flex; gap: 8px; margin-top: 10px;">
+              <img src="https://i.ibb.co/Kzx1mKrP/IMG-20260716-WA0000.jpg" alt="AWS Architecture Certificate" style="width: 110px; height: 80px; object-fit: cover; border-radius: 6px;">
+            </div>
+          </div>
+          <div class="timeline-item">
+            <h4>AWS Cloud Foundations & Machine Learning (Manara)</h4>
+            <span class="company">Amazon Web Services (AWS)</span>
+            <p>Certified in AWS Cloud Foundations, IAM security, VPC networking, EC2, S3 storage, and Machine Learning pipelines.</p>
+            <div class="project-gallery" style="display: flex; gap: 8px; margin-top: 10px;">
+              <img src="https://i.ibb.co/HpMNBCwG/1783213953-B545-D79-FE4965-CCC.png" alt="AWS Introduction Certificate" style="width: 110px; height: 80px; object-fit: cover; border-radius: 6px;">
+            </div>
+          </div>
+          <div class="timeline-item">
+            <h4>DEPI — Digital Egypt Pioneers Initiative</h4>
+            <span class="company">AI, Workflow Automation & Business Leadership</span>
+            <p>Specialized in Prompt Engineering, AI evaluation, bias mitigation, multi-modal LLMs, and professional branding.</p>
+          </div>
+          <div class="timeline-item">
+            <h4>ITI — Information Technology Institute</h4>
+            <span class="company">Embedded Systems Track</span>
+            <p>Intensive hands-on training in Embedded C, microcontrollers (AVR/ARM), drivers development, and real-time operating systems (FreeRTOS).</p>
+          </div>
+          <div class="timeline-item">
+            <h4>NTI — National Telecommunication Institute</h4>
+            <span class="company">Wireless Communications & Telemetry Track</span>
+            <p>Specialized training in wireless communication protocols, LoRaWAN deployments, RF fundamentals, and cellular/IoT networks.</p>
+          </div>
+        </div>
+
+        <h3 class="subsection-title">🛠️ Technical Stack & Tools</h3>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" class="skill-icon-img">
+            <span>Embedded C / C++</span>
+          </div>
+
+          <div class="skill-card">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" class="skill-icon-img">
+            <span>Python & Flask</span>
+          </div>
+
+          <div class="skill-card">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/arduino/arduino-original.svg" alt="Arduino" class="skill-icon-img">
+            <span>ESP32 / Arduino / AVR</span>
+          </div>
+
+          <div class="skill-card">
+            <span class="skill-icon-emoji">⚡</span>
+            <span>UART / SPI / I2C / I2S</span>
+          </div>
+
+          <div class="skill-card">
+            <span class="skill-icon-emoji">📡</span>
+            <span>LoRa & LoRaWAN</span>
+          </div>
+
+          <div class="skill-card">
+            <span class="skill-icon-emoji">🔄</span>
+            <span>MQTT & WebSockets</span>
+          </div>
+
+          <div class="skill-card">
+            <img src="https://img.icons8.com/color/48/cisco.png" alt="Cisco" class="skill-icon-img">
+            <span>CCNA Networking</span>
+          </div>
+
+          <div class="skill-card">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="AWS" class="skill-icon-img">
+            <span>AWS Cloud Architecture</span>
+          </div>
+
+          <div class="skill-card">
+            <span class="skill-icon-emoji">🤖</span>
+            <span>AWS Machine Learning</span>
+          </div>
+
+          <div class="skill-card">
+            <span class="skill-icon-emoji">⚙️</span>
+            <span>n8n Workflow Automation</span>
+          </div>
+
+          <div class="skill-card">
+            <span class="skill-icon-emoji">🔌</span>
+            <span>Evolution API & Webhooks</span>
+          </div>
+
+          <div class="skill-card">
+            <span class="skill-icon-emoji">🧠</span>
+            <span>Ollama / Llama 3 / LLaVA</span>
+          </div>
+
+          <div class="skill-card">
+            <span class="skill-icon-emoji">🔍</span>
+            <span>RAG & Vector Search</span>
+          </div>
+
+          <div class="skill-card">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker" class="skill-icon-img">
+            <span>Docker & Compose</span>
+          </div>
+
+          <div class="skill-card">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL" class="skill-icon-img">
+            <span>PostgreSQL & Redis</span>
+          </div>
+
+          <div class="skill-card">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" alt="Figma" class="skill-icon-img">
+            <span>UI/UX Wireframing</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- تبويب PORTFOLIO -->
+      <section class="tab-content" id="tab-portfolio">
+        <h2 class="section-title">Portfolio</h2>
+
+        <!-- شريط فلاتر المشاريع (Filter Tabs) -->
+        <div class="portfolio-filters">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="featured">Featured Projects</button>
+          <button class="filter-btn" data-filter="projects">Projects</button>
+        </div>
+
+        <div class="projects-grid">
+
+          <!-- 1. UNICEF "Meshwari" Initiative Speaker -->
+          <div class="project-card featured">
+            <div class="project-img">
+              <img src="https://i.ibb.co/1tz0t0Zh/IMG-20251022-WA0040.jpg" alt="Khaled Nsr Speaking at UNICEF Meshwari Initiative">
+            </div>
+            <h4>Youth Speaker & Tech Instructor — UNICEF "Meshwari" Initiative</h4>
+            <p>Participated as a key speaker and technical mentor in the "Meshwari" initiative supported by UNICEF. Delivered interactive technical lectures and youth development sessions on technology pathways, career readiness, and engineering innovation.</p>
+          </div>
+
+          <!-- 2. IEEE Best Member Award -->
+          <div class="project-card featured">
+            <div class="project-gallery" style="display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 4px;">
+              <div class="project-img" style="flex: 1; height: 110px; margin-bottom: 0;">
+                <img src="https://i.ibb.co/TqxGtnCs/IMG-20251216-WA0013.jpg" alt="IEEE 1st Place Certificate" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+              </div>
+              <div class="project-img" style="flex: 1; height: 110px; margin-bottom: 0;">
+                <img src="https://i.ibb.co/7J69drRn/IMG20260808210824.jpg" alt="IEEE Best Member Award Certificate" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+              </div>
+            </div>
+            <h4>1st Place & Best Member Honor — IEEE Networking Track</h4>
+            <p>Achieved 1st place in the CCNA Enterprise Networking competition and awarded "Best Member" in the IEEE Student Branch for excellence in network design, leadership, and workshop execution.</p>
+          </div>
+
+          <!-- 3. Enterprise Campus Communication Network -->
+          <div class="project-card featured">
+            <div class="project-img">
+              <img src="https://i.ibb.co/TxtcYKFM/Screenshot-2026-07-29-173951.png" alt="Multi-Building Campus Communication Network Architecture">
+            </div>
+            <h4>Multi-Building Campus Communication Network</h4>
+            <p>Enterprise Cisco Packet Tracer network infrastructure connecting campus buildings, administration units, and labs. Features VLAN segmentation, Inter-VLAN Routing, OSPF dynamic routing, NAT, and WAN links.</p>
+          </div>
+
+          <!-- 4. AI Voice-Controlled Robot -->
+          <div class="project-card featured">
+            <div class="project-gallery" style="display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 4px;">
+              <div class="project-img" style="flex: 1; height: 110px; margin-bottom: 0;">
+                <img src="https://i.ibb.co/R4gjCbWY/IMG-20260814-224226.jpg" alt="AI Robot Physical Setup" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+              </div>
+              <div class="project-img" style="flex: 1; height: 110px; margin-bottom: 0;">
+                <img src="https://i.ibb.co/pj4R52Xz/1771770167891.png" alt="Advanced AI Voice Controlled Robot System Architecture" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+              </div>
+            </div>
+            <h4>AI Voice-Controlled Interactive Robot (Advanced Architecture)</h4>
+            <p>Advanced multi-agent robotic system built with ESP32-S3, INMP441/MAX98357 audio processing, Python Flask, Ollama Llama 3, LLaVA vision, Edge-TTS, Sentence Transformers RAG, and SQLite memory with interactive Tkinter GUI.</p>
+          </div>
+
+          <!-- 5. Microcontroller Radar Target Detection System -->
+          <div class="project-card featured">
+            <div class="project-gallery" style="display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 4px;">
+              <div class="project-img" style="flex: 1; height: 95px; margin-bottom: 0;">
+                <img src="https://i.ibb.co/VcpfN43g/IMG-20260724-164525.jpg" alt="Radar System Visual UI & Hardware Plotter" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+              </div>
+              <div class="project-img" style="flex: 0 0 70px; height: 95px; margin-bottom: 0;">
+                <img src="https://i.ibb.co/GvcjbYjb/IMG20260731131030.jpg" alt="AVR Microcontroller Setup 1" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+              </div>
+              <div class="project-img" style="flex: 0 0 70px; height: 95px; margin-bottom: 0;">
+                <img src="https://i.ibb.co/7x9pPnBH/IMG20260731131009.jpg" alt="AVR Microcontroller Setup 2" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+              </div>
+            </div>
+            <h4>Microcontroller Radar Target Detection System (AVR)</h4>
+            <p>Real-time target tracking system built using AVR microcontrollers in Embedded C. Features ultrasonic distance measurement, servo sweeping, and high-speed UART serial communication for live visual radar plotting.</p>
+          </div>
+
+          <!-- 6. LoRaWAN & AVR Project -->
+          <div class="project-card featured">
+            <div class="project-gallery" style="display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 4px;">
+              <div class="project-img" style="flex: 0 0 85px; height: 75px; margin-bottom: 0;">
+                <img src="https://i.ibb.co/SwZn8H2J/IMG20260801153150.jpg" alt="LoRaWAN Hardware setup 1" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+              </div>
+              <div class="project-img" style="flex: 0 0 85px; height: 75px; margin-bottom: 0;">
+                <img src="https://i.ibb.co/WvM5X2nq/IMG20260801153140.jpg" alt="LoRaWAN Hardware setup 2" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+              </div>
+              <div class="project-img" style="flex: 0 0 85px; height: 75px; margin-bottom: 0;">
+                <img src="https://i.ibb.co/pB542vGV/IMG20260731130123.jpg" alt="LoRaWAN Hardware setup 3" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+              </div>
+            </div>
+            <h4>LoRaWAN Telemetry & Frame-Loss Optimization</h4>
+            <p>Long-range telemetry system built with AVR ATmega32/168 and WiMOD LoRaWAN modules in Embedded C. Solved frame-loss issues during Uplink/Downlink transmission by tuning Spreading Factors and CRC verification.</p>
+          </div>
+
+          <!-- 7. Enterprise WhatsApp Automation & UI/UX -->
+          <div class="project-card projects">
+            <div class="project-img">
+              <img src="https://i.ibb.co/PsQZMrs1/FB-IMG-1784652146830.jpg" alt="Enterprise WhatsApp AI Automation Diagram">
+            </div>
+            <h4>Enterprise WhatsApp AI Automation & Workflow UI/UX</h4>
+            <p>Multi-container workflow using Docker Compose, n8n, Evolution API, PostgreSQL, and Redis. Features custom automation UI/UX wireframing, LLM group event extraction, and Webhooks sync to Google Sheets API.</p>
+          </div>
+
+          <!-- 8. Minimal Linux Board PCB Design -->
+          <div class="project-card featured">
+            <div class="project-gallery" style="display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 4px;">
+              <div class="project-img" style="flex: 1; height: 110px; margin-bottom: 0;">
+                <img src="https://i.ibb.co/67mvkfgZ/The-close-up-of-the-PCB-design-for-my-minimal-Linux-board-linux-f1c100s-It-can-boot-from-SPI-memo.jpg" alt="Minimal Linux PCB Design Layout" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+              </div>
+              <div class="project-img" style="flex: 1; height: 110px; margin-bottom: 0;">
+                <img src="https://i.ibb.co/FbNfJVY1/1780203165933.png" alt="Minimal Linux Board 3D Rendering" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+              </div>
+            </div>
+            <h4>Minimal Linux Board PCB Design (F1C100s)</h4>
+            <p>Compact Custom Hardware PCB designed for Allwinner F1C100s Minimal Linux SoC. Features SPI Flash boot capabilities, compact power routing, clean signal integrity trace layout, and surface-mount components.</p>
+          </div>
+
+          <!-- 9. Python & AI Prompt Engine -->
+          <div class="project-card projects">
+            <div class="project-img">
+              <img src="https://i.ibb.co/ymgv2wbF/workflow-only.jpg" alt="Multi-Model AI Prompt Processing Engine Workflow">
+            </div>
+            <h4>Multi-Model AI Prompt Processing Engine</h4>
+            <p>Automated Python engine integrating Groq, Hugging Face, and Ollama APIs for prompt engineering and text generation, dynamically parsing and writing structured data via Google Sheets REST API.</p>
+          </div>
+
+          <!-- 10. IoT Sensor Monitoring & Automation Node (محدث: أضيفت لها صورة الـ AWS السابقة) -->
+          <div class="project-card projects">
+            <div class="project-gallery" style="display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 4px;">
+              <div class="project-img" style="flex: 1; height: 110px; margin-bottom: 0;">
+                <img src="https://i.ibb.co/YBVF8Cbc/seniorproject-energymonitoring-iot-diy-electricalengineering-JPEG-10.jpg" alt="Energy Monitoring Hardware 1" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+              </div>
+              <div class="project-img" style="flex: 1; height: 110px; margin-bottom: 0;">
+                <img src="https://i.ibb.co/XrmKdMfb/seniorproject-energymonitoring-iot-diy-electricalengineering-JPEG-11.jpg" alt="Energy Monitoring Hardware 2" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+              </div>
+              <div class="project-img" style="flex: 1; height: 110px; margin-bottom: 0;">
+                <img src="https://i.ibb.co/PG5gxTbS/seniorproject-energymonitoring-iot-diy-electricalengineering-JPEG-7.jpg" alt="Energy Monitoring Hardware 3" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+              </div>
+            </div>
+            <h4>IoT Sensor Monitoring & Automation Node</h4>
+            <p>Wireless IoT monitoring system engineered with ESP32 microcontrollers. Handles multi-sensor interfacing, local threshold validation, and real-time device-to-server communication over MQTT and WebSockets.</p>
+          </div>
+
+          <!-- 11. AWS Enterprise Cloud Architecture Labs (محدث: وضعت الصورة الجديدة التي أرسلتها) -->
+          <div class="project-card projects">
+            <div class="project-img">
+              <img src="https://i.ibb.co/bjLV6YNG/IMG-20260816-035930.png" alt="AWS Enterprise Cloud Architecture Labs Setup">
+            </div>
+            <h4>AWS Enterprise Cloud Architecture Labs</h4>
+            <p>Cloud network setup implementing AWS VPC subnets, Internet/NAT Gateways, Transit Gateway, S3 storage, RDS Aurora, IAM security governance, CloudWatch monitoring, and GuardDuty cost budgets.</p>
+          </div>
+
+          <!-- 12. Interactive Web Portfolio -->
+          <div class="project-card projects">
+            <h4>Interactive Physics-Based Web Experience</h4>
+            <p>Custom dark-themed interactive portfolio featuring custom SVG graphics and physics-driven tug-able lamp interactions built with HTML5, CSS3, JavaScript, GSAP MorphSVG, and Draggable.</p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- تبويب CONTACT -->
+      <section class="tab-content" id="tab-contact">
+        <h2 class="section-title">Contact Me</h2>
+        
+        <!-- كروت بيانات التواصل المباشرة -->
+        <div class="services-grid" style="margin-bottom: 30px;">
+          
+          <div class="service-card">
+            <span class="service-icon">📱</span>
+            <div>
+              <h4>Phone & WhatsApp</h4>
+              <p><a href="https://wa.me/201272115662" target="_blank" style="color: inherit; text-decoration: underline;">+20 127 211 5662</a></p>
+            </div>
+          </div>
+
+          <div class="service-card">
+            <span class="service-icon">📧</span>
+            <div>
+              <h4>Email Address</h4>
+              <p><a href="mailto:k01581012@gmail.com" style="color: inherit; text-decoration: underline;">k01581012@gmail.com</a></p>
+            </div>
+          </div>
+
+          <div class="service-card">
+            <span class="service-icon">📍</span>
+            <div>
+              <h4>Location</h4>
+              <p>Cairo, Egypt (Available for Remote & On-site)</p>
+            </div>
+          </div>
+
+          <div class="service-card">
+            <span class="service-icon">💼</span>
+            <div>
+              <h4>Profiles</h4>
+              <p>
+                <a href="https://www.linkedin.com/in/khaled-nsr" target="_blank" style="color: inherit; text-decoration: underline;">LinkedIn</a> | 
+                <a href="https://github.com" target="_blank" style="color: inherit; text-decoration: underline;">GitHub</a>
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <h3 class="subsection-title">Send a Message</h3>
+        <p style="margin-bottom: 20px; color: var(--text-muted, #aaa);">Have a project in mind, need an automation workflow, or want to discuss hardware integration? Drop me a message below!</p>
+        
+        <form action="https://formspree.io/f/xzepvqok" method="POST" class="contact-form">
+          <input type="text" name="name" placeholder="Your Full Name" required>
+          <input type="email" name="_replyto" placeholder="Your Email Address" required>
+          <input type="text" name="subject" placeholder="Subject (e.g., IoT Project / Automation Consultation)">
+          <textarea name="message" placeholder="Write your message here..." rows="5" required></textarea>
+          <button type="submit" class="btn-send">Send Message 🚀</button>
+        </form>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Modal التكبير التفاعلي للصور -->
+  <div id="image-lightbox" class="lightbox-modal">
+    <span class="lightbox-close">&times;</span>
+    <img class="lightbox-content" id="lightbox-img" alt="Zoomed View">
+    <div id="lightbox-caption"></div>
+  </div>
+
+  <script src='https://unpkg.co/gsap@3/dist/gsap.min.js'></script>
+  <script src='https://unpkg.com/gsap@3/dist/Draggable.min.js'></script>
+  <script src='https://assets.codepen.io/16327/MorphSVGPlugin3.min.js'></script>
+  <script src="./script.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // 1. ميزة تكبير الصور (Lightbox Modal)
+      const modal = document.getElementById("image-lightbox");
+      const modalImg = document.getElementById("lightbox-img");
+      const captionText = document.getElementById("lightbox-caption");
+      const closeBtn = document.querySelector(".lightbox-close");
+
+      document.querySelectorAll(".project-gallery img, .project-img img, .avatar").forEach(img => {
+        img.addEventListener("click", function (e) {
+          e.preventDefault();
+          modal.style.display = "block";
+          modalImg.src = this.src;
+          captionText.innerHTML = this.alt || "Preview";
+        });
+      });
+
+      if (closeBtn) {
+        closeBtn.onclick = function () {
+          modal.style.display = "none";
+        };
+      }
+
+      modal.onclick = function (e) {
+        if (e.target !== modalImg) {
+          modal.style.display = "none";
+        }
+      };
+
+      // 2. التنقل بين التبويبات (Tab Navigation)
+      const navBtns = document.querySelectorAll(".nav-btn");
+      const tabContents = document.querySelectorAll(".tab-content");
+
+      navBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const targetTab = btn.getAttribute("data-tab");
+          navBtns.forEach(b => b.classList.remove("active"));
+          tabContents.forEach(c => c.classList.remove("active"));
+
+          btn.classList.add("active");
+          const targetElement = document.getElementById(`tab-${targetTab}`);
+          if (targetElement) targetElement.classList.add("active");
+        });
+      });
+
+      // 3. تصفية المشاريع (Portfolio Filter)
+      const filterBtns = document.querySelectorAll(".filter-btn");
+      const projectCards = document.querySelectorAll(".project-card");
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const filter = btn.getAttribute("data-filter");
+          filterBtns.forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+
+          projectCards.forEach(card => {
+            if (filter === "all" || card.classList.contains(filter)) {
+              card.style.display = "block";
+            } else {
+              card.style.display = "none";
+            }
+          });
+        });
+      });
+    });
+  </script>
+
+</body>
+
+</html>
