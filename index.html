@@ -3,25 +3,652 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Khaled Mohamed Nsr - Portfolio</title>
   <link rel="stylesheet" href="https://public.codepenassets.com/css/normalize-5.0.0.min.css">
-  <link rel="stylesheet" href="./style.css">
   <link rel="apple-touch-icon" href="https://codetap.org/assets/img/favicon.png">
   <link rel="icon" type="image/png" href="https://codetap.org/assets/img/favicon.png">
 
   <style>
-    /* --- تأثيرات تكبير الصور وتفاعلها --- */
-    .project-gallery img,
-    .project-img img,
+    /* ==========================================
+       1. المتغيرات والتأسيس الأصلي (Lamp Theme Vars)
+       ========================================== */
+    *,
+    *:after,
+    *:before {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --cord: hsl(210, 0%, calc((40 + (var(--on, 0) * 50)) * 1%));
+      --opening: hsl(50, calc((10 + (var(--on, 0) * 80)) * 1%), calc((20 + (var(--on, 0) * 70)) * 1%));
+      --feature: #0a0a0a;
+      --accent: 210;
+      --tongue: #e06952;
+      --base-top: hsl(var(--accent), 0%, calc((40 + (var(--on, 0) * 40)) * 1%));
+      --base-side: hsl(var(--accent), 0%, calc((20 + (var(--on, 0) * 40)) * 1%));
+      --post: hsl(var(--accent), 0%, calc((20 + (var(--on, 0) * 40)) * 1%));
+      --b-1: hsla(45, calc((0 + (var(--on, 0) * 0)) * 1%), calc((50 + (var(--on, 0) * 50)) * 1%), 0.85);
+      --b-2: hsla(45, calc((0 + (var(--on, 0) * 0)) * 1%), calc((20 + (var(--on, 0) * 30)) * 1%), 0.25);
+      --b-3: hsla(45, calc((0 + (var(--on, 0) * 0)) * 1%), calc((20 + (var(--on, 0) * 30)) * 1%), 0.5);
+      --b-4: hsla(45, calc((0 + (var(--on, 0) * 0)) * 1%), calc((20 + (var(--on, 0) * 30)) * 1%), 0.25);
+      --l-1: hsla(45, calc((0 + (var(--on, 0) * 20)) * 1%), calc((50 + (var(--on, 0) * 50)) * 1%), 0.85);
+      --l-2: hsla(45, calc((0 + (var(--on, 0) * 20)) * 1%), calc((50 + (var(--on, 0) * 50)) * 1%), 0.85);
+      --shade-hue: 320;
+      --t-1: hsl(var(--shade-hue), calc((0 + (var(--on, 0) * 20)) * 1%), calc((30 + (var(--on, 0) * 60)) * 1%));
+      --t-2: hsl(var(--shade-hue), calc((0 + (var(--on, 0) * 20)) * 1%), calc((20 + (var(--on, 0) * 35)) * 1%));
+      --t-3: hsl(var(--shade-hue), calc((0 + (var(--on, 0) * 20)) * 1%), calc((10 + (var(--on, 0) * 20)) * 1%));
+
+      --port-bg: #1e1e24;
+      --port-border: #2a2a35;
+      --port-accent: #ffdb6e;
+      --port-text: #ffffff;
+      --port-subtext: #9e9ea7;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: #0b0b0e;
+      position: relative;
+      overflow-x: hidden;
+      font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+      color: #fff;
+    }
+
+    #pcb-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    label,
+    input[type="checkbox"] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+
+    /* ==========================================
+       2. الأباجورة وتأثيرات التحريك (Lamp Styles)
+       ========================================== */
+    .lamp-wrapper {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transition: left 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+      z-index: 20;
+    }
+
+    body.is-on .lamp-wrapper {
+      left: 18%;
+    }
+
+    .lamp {
+      display: block;
+      height: 45vmin;
+      overflow: visible !important;
+      transition: height 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .cord { stroke: var(--cord); }
+    .cord--rig { display: none; }
+    .lamp__tongue { fill: var(--tongue); }
+    .lamp__hit { cursor: pointer; opacity: 0; }
+    .lamp__feature { fill: var(--feature); }
+    .lamp__stroke { stroke: var(--feature); }
+    .lamp__mouth, .lamp__light { opacity: var(--on, 0); }
+    .shade__opening { fill: var(--opening); }
+    .shade__opening-shade { opacity: calc(1 - var(--on, 0)); }
+    .post__body { fill: var(--post); }
+    .base__top { fill: var(--base-top); }
+    .base__side { fill: var(--base-side); }
+    .top__body { fill: var(--t-3); }
+
+    /* ==========================================
+       3. حاوية البورتفوليو وتصميمه (Tabs Layout)
+       ========================================== */
+    .portfolio-container {
+      position: absolute;
+      top: 50%;
+      left: 32%;
+      transform: translateY(-50%);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+      width: 65%;
+      max-width: 950px;
+      height: 85vh;
+      max-height: 650px;
+      display: flex;
+      gap: 25px;
+      align-items: stretch;
+      z-index: 10;
+    }
+
+    body.is-on .portfolio-container {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .profile-card {
+      background: var(--port-bg);
+      border: 1px solid var(--port-border);
+      border-radius: 20px;
+      padding: 25px 20px;
+      width: 260px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      height: 100%;
+    }
+
+    .avatar-box {
+      width: 110px;
+      height: 110px;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #282830;
+      margin-bottom: 12px;
+    }
+
     .avatar {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       cursor: pointer;
       transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), filter 0.3s ease;
     }
 
-    .project-gallery img:hover,
-    .project-img img:hover {
-      transform: scale(1.06);
+    .avatar:hover {
+      transform: scale(1.05);
       filter: brightness(1.1);
+    }
+
+    .name {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--port-text);
+      margin-bottom: 6px;
+    }
+
+    .badge {
+      background: #282830;
+      color: var(--port-subtext);
+      font-size: 0.7rem;
+      padding: 4px 10px;
+      border-radius: 8px;
+    }
+
+    .divider {
+      width: 100%;
+      border: none;
+      border-top: 1px solid var(--port-border);
+      margin: 15px 0;
+    }
+
+    .contacts-list {
+      list-style: none;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: left;
+      padding: 0;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-box {
+      width: 35px;
+      height: 35px;
+      background: #282830;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1rem;
+      color: var(--port-accent);
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .contact-info .title {
+      font-size: 0.6rem;
+      color: var(--port-subtext);
+      letter-spacing: 0.5px;
+    }
+
+    .contact-info .value {
+      font-size: 0.75rem;
+      color: #fff;
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .btn-stay-in-touch {
+      margin-top: auto;
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--port-accent);
+      background: transparent;
+      color: var(--port-accent);
+      font-weight: 600;
+      font-size: 0.75rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .btn-stay-in-touch:hover {
+      background: var(--port-accent);
+      color: #000;
+    }
+
+    .main-content {
+      background: var(--port-bg);
+      border: 1px solid var(--port-border);
+      border-radius: 20px;
+      padding: 30px;
+      padding-top: 60px;
+      flex-grow: 1;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    .main-content::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .main-content::-webkit-scrollbar-track {
+      background: #1e1e24;
+      border-radius: 10px;
+    }
+
+    .main-content::-webkit-scrollbar-thumb {
+      background: #333340;
+      border-radius: 10px;
+    }
+
+    .main-content::-webkit-scrollbar-thumb:hover {
+      background: var(--port-accent);
+    }
+
+    .navbar {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: #282830;
+      border-bottom-left-radius: 20px;
+      border-top-right-radius: 20px;
+      border-left: 1px solid var(--port-border);
+      border-bottom: 1px solid var(--port-border);
+      padding: 10px 20px;
+      display: flex;
+      gap: 15px;
+      z-index: 20;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--port-subtext);
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .nav-btn.active, .nav-btn:hover {
+      color: var(--port-accent);
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+      position: relative;
+      padding-bottom: 8px;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 35px;
+      height: 3px;
+      background: var(--port-accent);
+      border-radius: 2px;
+    }
+
+    .about-text {
+      color: #d6d6d6;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .about-text p {
+      margin-bottom: 8px;
+    }
+
+    .subsection-title {
+      font-size: 1.1rem;
+      margin: 20px 0 12px 0;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .service-card {
+      background: #23232b;
+      border: 1px solid var(--port-border);
+      border-radius: 12px;
+      padding: 15px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .service-card a {
+      color: inherit;
+      text-decoration: underline;
+    }
+
+    .service-icon {
+      font-size: 1.5rem;
+      color: var(--port-accent);
+    }
+
+    .service-card h4 {
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+      color: #fff;
+    }
+
+    .service-card p {
+      font-size: 0.75rem;
+      color: var(--port-subtext);
+      line-height: 1.3;
+    }
+
+    .portfolio-filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: #282830;
+      border: 1px solid var(--port-border);
+      color: var(--port-subtext);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--port-accent);
+      color: #000;
+      border-color: var(--port-accent);
+    }
+
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 20px;
+      border-left: 2px solid var(--port-border);
+      padding-left: 15px;
+    }
+
+    .timeline-item {
+      position: relative;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -21px;
+      top: 5px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--port-accent);
+    }
+
+    .timeline-item h4 {
+      font-size: 0.9rem;
+      color: #fff;
+    }
+
+    .timeline-item .company {
+      font-size: 0.75rem;
+      color: var(--port-subtext);
+      display: block;
+    }
+
+    .timeline-item .date {
+      font-size: 0.7rem;
+      color: var(--port-accent);
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .timeline-item p {
+      font-size: 0.75rem;
+      color: #d6d6d6;
+      line-height: 1.4;
+    }
+
+    .project-gallery {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .project-gallery img {
+      width: 110px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid var(--port-border);
+      cursor: pointer;
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+
+    .project-gallery img:hover {
+      transform: scale(1.05);
+      filter: brightness(1.1);
+    }
+
+    /* ==========================================
+       4. شبكة كروت المهارات (Skills Grid)
+       ========================================== */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .skill-card {
+      background: #23232b;
+      border: 1px solid var(--port-border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--port-text);
+      transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .skill-card:hover {
+      border-color: var(--port-accent);
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(255, 219, 110, 0.1);
+    }
+
+    .skill-icon-img {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .skill-icon-emoji {
+      font-size: 1.2rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    /* ==========================================
+       5. شبكة المشاريع (Projects Grid)
+       ========================================== */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 15px;
+    }
+
+    .project-card {
+      background: #23232b;
+      border: 1px solid var(--port-border);
+      border-radius: 12px;
+      padding: 15px;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--port-accent);
+    }
+
+    .project-img {
+      width: 100%;
+      height: 120px;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 10px;
+      border: 1px solid var(--port-border);
+    }
+
+    .project-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .project-img img:hover {
+      transform: scale(1.05);
+    }
+
+    .project-card h4 {
+      font-size: 0.9rem;
+      color: var(--port-accent);
+      margin-bottom: 6px;
+    }
+
+    .project-card p {
+      font-size: 0.75rem;
+      color: var(--port-subtext);
+      line-height: 1.4;
+    }
+
+    /* ==========================================
+       6. فورم التواصل (Contact Form)
+       ========================================== */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      background: #23232b;
+      border: 1px solid var(--port-border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.8rem;
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      outline: 1px solid var(--port-accent);
+    }
+
+    .btn-send {
+      align-self: flex-start;
+      padding: 10px 24px;
+      background: var(--port-accent);
+      border: none;
+      border-radius: 8px;
+      color: #000;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: opacity 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-send:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
     }
 
     /* --- نافذة تكبير الصور (Lightbox Modal) --- */
@@ -76,6 +703,98 @@
     @keyframes zoomAnimation {
       from { transform: scale(0.85); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
+    }
+
+    /* ==========================================
+       7. التجاوب مع الموبايل والشاشات الصغيرة (Responsive Design)
+       ========================================== */
+    @media (max-width: 1024px) {
+      body.is-on .lamp-wrapper {
+        left: 12%;
+      }
+
+      .portfolio-container {
+        left: 28%;
+        width: 70%;
+      }
+    }
+
+    @media (max-width: 820px) {
+      body {
+        overflow-y: auto;
+      }
+
+      .lamp-wrapper {
+        position: fixed;
+        top: 50%;
+        left: 50% !important;
+        transform: translate(-50%, -50%);
+        transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        margin: 0;
+        z-index: 100;
+      }
+
+      .lamp {
+        height: 60vmin;
+        min-height: 280px;
+        transition: height 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+      }
+
+      body.is-on .lamp-wrapper {
+        position: fixed;
+        top: 10px;
+        left: 10px !important;
+        transform: none;
+      }
+
+      body.is-on .lamp {
+        height: 18vmin;
+        min-height: 75px;
+      }
+
+      .portfolio-container {
+        position: relative;
+        top: 0;
+        left: 0;
+        transform: none;
+        width: 92%;
+        max-width: 100%;
+        height: auto;
+        max-height: none;
+        margin: 0 auto 30px auto;
+        flex-direction: column;
+        transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out, margin-top 0.8s ease-in-out;
+      }
+
+      body.is-on .portfolio-container {
+        margin-top: 95px;
+      }
+
+      .profile-card {
+        width: 100%;
+        height: auto;
+      }
+
+      .main-content {
+        padding-top: 70px;
+        height: auto;
+        overflow-y: visible;
+      }
+
+      .navbar {
+        position: absolute;
+        width: 100%;
+        border-radius: 20px 20px 0 0;
+        justify-content: center;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .skills-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      }
     }
   </style>
 </head>
@@ -231,7 +950,7 @@
         </li>
       </ul>
 
-      <a href="https://www.linkedin.com/in/khaled-nsr" target="_blank" class="btn-stay-in-touch" style="text-decoration: none; display: inline-block; text-align: center;">STAY IN TOUCH ↗</a>
+      <a href="https://www.linkedin.com/in/khaled-nsr" target="_blank" class="btn-stay-in-touch">STAY IN TOUCH ↗</a>
     </aside>
 
     <!-- المنطقة الرئيسية -->
@@ -308,9 +1027,9 @@
             <span class="company">Leader Company (4 Months Internship + 1 Year Full-time Work)</span>
             <span class="date">Apr 2025 — Aug 2026</span>
             <p>Completed 4 months of intensive practical engineering training followed by 1 year of full-time engineering work focused on Printed Circuit Board (PCB) design & troubleshooting, Uninterruptible Power Supply (UPS) systems maintenance, and Softstarter motor control automation.</p>
-            <div class="project-gallery" style="display: flex; gap: 8px; margin-top: 10px;">
+            <div class="project-gallery">
               <a href="https://ibb.co/LDVChM1z" target="_blank" onclick="event.preventDefault();">
-                <img src="https://i.ibb.co/9mQq3JW9/IMG-20260512-210055.png" alt="Leader Company Experience Certificate" style="width: 110px; height: 80px; object-fit: cover; border-radius: 6px;">
+                <img src="https://i.ibb.co/9mQq3JW9/IMG-20260512-210055.png" alt="Leader Company Experience Certificate">
               </a>
             </div>
           </div>
@@ -329,10 +1048,10 @@
             <h4>1st Place & Best Member — CCNA Enterprise Networking</h4>
             <span class="company">IEEE Student Branch</span>
             <p>Achieved 1st place in CCNA Enterprise network design competition and awarded "Best Member" for technical performance and leadership.</p>
-            <div class="project-gallery" style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
-              <img src="https://i.ibb.co/TqxGtnCs/IMG-20251216-WA0013.jpg" alt="IEEE First Place Certificate" style="width: 110px; height: 80px; object-fit: cover; border-radius: 6px;">
-              <img src="https://i.ibb.co/7J69drRn/IMG20260808210824.jpg" alt="Best Member Award Certificate" style="width: 110px; height: 80px; object-fit: cover; border-radius: 6px;">
-              <img src="https://i.ibb.co/hj0rHHG/file-00000000b26081f6a39f5e9f6f64cdfa.png" alt="Khaled Nsr Receiving Award" style="width: 110px; height: 80px; object-fit: cover; border-radius: 6px;">
+            <div class="project-gallery">
+              <img src="https://i.ibb.co/TqxGtnCs/IMG-20251216-WA0013.jpg" alt="IEEE First Place Certificate">
+              <img src="https://i.ibb.co/7J69drRn/IMG20260808210824.jpg" alt="Best Member Award Certificate">
+              <img src="https://i.ibb.co/hj0rHHG/file-00000000b26081f6a39f5e9f6f64cdfa.png" alt="Khaled Nsr Receiving Award">
             </div>
           </div>
           
@@ -340,9 +1059,9 @@
             <h4>Youth Speaker & Technical Instructor</h4>
             <span class="company">UNICEF Supported Initiative ("Meshwari" Project)</span>
             <p>Delivered technical workshops and motivational sessions on technology, engineering pathways, and personal growth for young innovators.</p>
-            <div class="project-gallery" style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
-              <img src="https://i.ibb.co/KcJmWbZZ/1766690609574.png" alt="UNICEF Certificate" style="width: 110px; height: 80px; object-fit: cover; border-radius: 6px;">
-              <img src="https://i.ibb.co/1tz0t0Zh/IMG-20251022-WA0040.jpg" alt="Khaled Nsr Speaking at UNICEF Event" style="width: 130px; height: 80px; object-fit: cover; border-radius: 6px;">
+            <div class="project-gallery">
+              <img src="https://i.ibb.co/KcJmWbZZ/1766690609574.png" alt="UNICEF Certificate">
+              <img src="https://i.ibb.co/1tz0t0Zh/IMG-20251022-WA0040.jpg" alt="Khaled Nsr Speaking at UNICEF Event" style="width: 130px;">
             </div>
           </div>
         </div>
@@ -358,16 +1077,16 @@
             <h4>AWS Certified Solutions Architect & Cloud Architecture</h4>
             <span class="company">Amazon Web Services (AWS)</span>
             <p>Certified in designing resilient, highly available, cost-optimized, and secure AWS Cloud architectures.</p>
-            <div class="project-gallery" style="display: flex; gap: 8px; margin-top: 10px;">
-              <img src="https://i.ibb.co/Kzx1mKrP/IMG-20260716-WA0000.jpg" alt="AWS Architecture Certificate" style="width: 110px; height: 80px; object-fit: cover; border-radius: 6px;">
+            <div class="project-gallery">
+              <img src="https://i.ibb.co/Kzx1mKrP/IMG-20260716-WA0000.jpg" alt="AWS Architecture Certificate">
             </div>
           </div>
           <div class="timeline-item">
             <h4>AWS Cloud Foundations & Machine Learning (Manara)</h4>
             <span class="company">Amazon Web Services (AWS)</span>
             <p>Certified in AWS Cloud Foundations, IAM security, VPC networking, EC2, S3 storage, and Machine Learning pipelines.</p>
-            <div class="project-gallery" style="display: flex; gap: 8px; margin-top: 10px;">
-              <img src="https://i.ibb.co/HpMNBCwG/1783213953-B545-D79-FE4965-CCC.png" alt="AWS Introduction Certificate" style="width: 110px; height: 80px; object-fit: cover; border-radius: 6px;">
+            <div class="project-gallery">
+              <img src="https://i.ibb.co/HpMNBCwG/1783213953-B545-D79-FE4965-CCC.png" alt="AWS Introduction Certificate">
             </div>
           </div>
           <div class="timeline-item">
@@ -393,77 +1112,62 @@
             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" class="skill-icon-img">
             <span>Embedded C / C++</span>
           </div>
-
           <div class="skill-card">
             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" class="skill-icon-img">
             <span>Python & Flask</span>
           </div>
-
           <div class="skill-card">
             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/arduino/arduino-original.svg" alt="Arduino" class="skill-icon-img">
             <span>ESP32 / Arduino / AVR</span>
           </div>
-
           <div class="skill-card">
             <span class="skill-icon-emoji">⚡</span>
             <span>UART / SPI / I2C / I2S</span>
           </div>
-
           <div class="skill-card">
             <span class="skill-icon-emoji">📡</span>
             <span>LoRa & LoRaWAN</span>
           </div>
-
           <div class="skill-card">
             <span class="skill-icon-emoji">🔄</span>
             <span>MQTT & WebSockets</span>
           </div>
-
           <div class="skill-card">
             <img src="https://img.icons8.com/color/48/cisco.png" alt="Cisco" class="skill-icon-img">
             <span>CCNA Networking</span>
           </div>
-
           <div class="skill-card">
             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="AWS" class="skill-icon-img">
             <span>AWS Cloud Architecture</span>
           </div>
-
           <div class="skill-card">
             <span class="skill-icon-emoji">🤖</span>
             <span>AWS Machine Learning</span>
           </div>
-
           <div class="skill-card">
             <span class="skill-icon-emoji">⚙️</span>
             <span>n8n Workflow Automation</span>
           </div>
-
           <div class="skill-card">
             <span class="skill-icon-emoji">🔌</span>
             <span>Evolution API & Webhooks</span>
           </div>
-
           <div class="skill-card">
             <span class="skill-icon-emoji">🧠</span>
             <span>Ollama / Llama 3 / LLaVA</span>
           </div>
-
           <div class="skill-card">
             <span class="skill-icon-emoji">🔍</span>
             <span>RAG & Vector Search</span>
           </div>
-
           <div class="skill-card">
             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker" class="skill-icon-img">
             <span>Docker & Compose</span>
           </div>
-
           <div class="skill-card">
             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL" class="skill-icon-img">
             <span>PostgreSQL & Redis</span>
           </div>
-
           <div class="skill-card">
             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" alt="Figma" class="skill-icon-img">
             <span>UI/UX Wireframing</span>
@@ -475,7 +1179,6 @@
       <section class="tab-content" id="tab-portfolio">
         <h2 class="section-title">Portfolio</h2>
 
-        <!-- شريط فلاتر المشاريع (Filter Tabs) -->
         <div class="portfolio-filters">
           <button class="filter-btn active" data-filter="all">All</button>
           <button class="filter-btn" data-filter="featured">Featured Projects</button>
@@ -483,8 +1186,6 @@
         </div>
 
         <div class="projects-grid">
-
-          <!-- 1. UNICEF "Meshwari" Initiative Speaker -->
           <div class="project-card featured">
             <div class="project-img">
               <img src="https://i.ibb.co/1tz0t0Zh/IMG-20251022-WA0040.jpg" alt="Khaled Nsr Speaking at UNICEF Meshwari Initiative">
@@ -493,7 +1194,6 @@
             <p>Participated as a key speaker and technical mentor in the "Meshwari" initiative supported by UNICEF. Delivered interactive technical lectures and youth development sessions on technology pathways, career readiness, and engineering innovation.</p>
           </div>
 
-          <!-- 2. IEEE Best Member Award -->
           <div class="project-card featured">
             <div class="project-gallery" style="display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 4px;">
               <div class="project-img" style="flex: 1; height: 110px; margin-bottom: 0;">
@@ -507,7 +1207,6 @@
             <p>Achieved 1st place in the CCNA Enterprise Networking competition and awarded "Best Member" in the IEEE Student Branch for excellence in network design, leadership, and workshop execution.</p>
           </div>
 
-          <!-- 3. Enterprise Campus Communication Network -->
           <div class="project-card featured">
             <div class="project-img">
               <img src="https://i.ibb.co/TxtcYKFM/Screenshot-2026-07-29-173951.png" alt="Multi-Building Campus Communication Network Architecture">
@@ -516,7 +1215,6 @@
             <p>Enterprise Cisco Packet Tracer network infrastructure connecting campus buildings, administration units, and labs. Features VLAN segmentation, Inter-VLAN Routing, OSPF dynamic routing, NAT, and WAN links.</p>
           </div>
 
-          <!-- 4. AI Voice-Controlled Robot -->
           <div class="project-card featured">
             <div class="project-gallery" style="display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 4px;">
               <div class="project-img" style="flex: 1; height: 110px; margin-bottom: 0;">
@@ -530,7 +1228,6 @@
             <p>Advanced multi-agent robotic system built with ESP32-S3, INMP441/MAX98357 audio processing, Python Flask, Ollama Llama 3, LLaVA vision, Edge-TTS, Sentence Transformers RAG, and SQLite memory with interactive Tkinter GUI.</p>
           </div>
 
-          <!-- 5. Microcontroller Radar Target Detection System -->
           <div class="project-card featured">
             <div class="project-gallery" style="display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 4px;">
               <div class="project-img" style="flex: 1; height: 95px; margin-bottom: 0;">
@@ -547,7 +1244,6 @@
             <p>Real-time target tracking system built using AVR microcontrollers in Embedded C. Features ultrasonic distance measurement, servo sweeping, and high-speed UART serial communication for live visual radar plotting.</p>
           </div>
 
-          <!-- 6. LoRaWAN & AVR Project -->
           <div class="project-card featured">
             <div class="project-gallery" style="display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 4px;">
               <div class="project-img" style="flex: 0 0 85px; height: 75px; margin-bottom: 0;">
@@ -564,7 +1260,6 @@
             <p>Long-range telemetry system built with AVR ATmega32/168 and WiMOD LoRaWAN modules in Embedded C. Solved frame-loss issues during Uplink/Downlink transmission by tuning Spreading Factors and CRC verification.</p>
           </div>
 
-          <!-- 7. Enterprise WhatsApp Automation & UI/UX -->
           <div class="project-card projects">
             <div class="project-img">
               <img src="https://i.ibb.co/PsQZMrs1/FB-IMG-1784652146830.jpg" alt="Enterprise WhatsApp AI Automation Diagram">
@@ -573,7 +1268,6 @@
             <p>Multi-container workflow using Docker Compose, n8n, Evolution API, PostgreSQL, and Redis. Features custom automation UI/UX wireframing, LLM group event extraction, and Webhooks sync to Google Sheets API.</p>
           </div>
 
-          <!-- 8. Minimal Linux Board PCB Design -->
           <div class="project-card featured">
             <div class="project-gallery" style="display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 4px;">
               <div class="project-img" style="flex: 1; height: 110px; margin-bottom: 0;">
@@ -587,7 +1281,6 @@
             <p>Compact Custom Hardware PCB designed for Allwinner F1C100s Minimal Linux SoC. Features SPI Flash boot capabilities, compact power routing, clean signal integrity trace layout, and surface-mount components.</p>
           </div>
 
-          <!-- 9. Python & AI Prompt Engine -->
           <div class="project-card projects">
             <div class="project-img">
               <img src="https://i.ibb.co/ymgv2wbF/workflow-only.jpg" alt="Multi-Model AI Prompt Processing Engine Workflow">
@@ -596,7 +1289,6 @@
             <p>Automated Python engine integrating Groq, Hugging Face, and Ollama APIs for prompt engineering and text generation, dynamically parsing and writing structured data via Google Sheets REST API.</p>
           </div>
 
-          <!-- 10. IoT Sensor Monitoring & Automation Node (محدث: أضيفت لها صورة الـ AWS السابقة) -->
           <div class="project-card projects">
             <div class="project-gallery" style="display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 4px;">
               <div class="project-img" style="flex: 1; height: 110px; margin-bottom: 0;">
@@ -613,7 +1305,6 @@
             <p>Wireless IoT monitoring system engineered with ESP32 microcontrollers. Handles multi-sensor interfacing, local threshold validation, and real-time device-to-server communication over MQTT and WebSockets.</p>
           </div>
 
-          <!-- 11. AWS Enterprise Cloud Architecture Labs (محدث: وضعت الصورة الجديدة التي أرسلتها) -->
           <div class="project-card projects">
             <div class="project-img">
               <img src="https://i.ibb.co/bjLV6YNG/IMG-20260816-035930.png" alt="AWS Enterprise Cloud Architecture Labs Setup">
@@ -622,12 +1313,10 @@
             <p>Cloud network setup implementing AWS VPC subnets, Internet/NAT Gateways, Transit Gateway, S3 storage, RDS Aurora, IAM security governance, CloudWatch monitoring, and GuardDuty cost budgets.</p>
           </div>
 
-          <!-- 12. Interactive Web Portfolio -->
           <div class="project-card projects">
             <h4>Interactive Physics-Based Web Experience</h4>
             <p>Custom dark-themed interactive portfolio featuring custom SVG graphics and physics-driven tug-able lamp interactions built with HTML5, CSS3, JavaScript, GSAP MorphSVG, and Draggable.</p>
           </div>
-
         </div>
       </section>
 
@@ -635,9 +1324,7 @@
       <section class="tab-content" id="tab-contact">
         <h2 class="section-title">Contact Me</h2>
         
-        <!-- كروت بيانات التواصل المباشرة -->
         <div class="services-grid" style="margin-bottom: 30px;">
-          
           <div class="service-card">
             <span class="service-icon">📱</span>
             <div>
@@ -668,15 +1355,14 @@
               <h4>Profiles</h4>
               <p>
                 <a href="https://www.linkedin.com/in/khaled-nsr" target="_blank" style="color: inherit; text-decoration: underline;">LinkedIn</a> | 
-                <a href="https://github.com" target="_blank" style="color: inherit; text-decoration: underline;">GitHub</a>
+                <a href="https://github.com/k01581012-blip" target="_blank" style="color: inherit; text-decoration: underline;">GitHub</a>
               </p>
             </div>
           </div>
-
         </div>
 
         <h3 class="subsection-title">Send a Message</h3>
-        <p style="margin-bottom: 20px; color: var(--text-muted, #aaa);">Have a project in mind, need an automation workflow, or want to discuss hardware integration? Drop me a message below!</p>
+        <p style="margin-bottom: 20px; color: #aaa;">Have a project in mind, need an automation workflow, or want to discuss hardware integration? Drop me a message below!</p>
         
         <form action="https://formspree.io/f/xzepvqok" method="POST" class="contact-form">
           <input type="text" name="name" placeholder="Your Full Name" required>
