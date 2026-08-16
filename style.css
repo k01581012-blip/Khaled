@@ -85,9 +85,10 @@ body.is-on .lamp-wrapper {
 }
 
 .lamp {
-  display: none;
+  display: block;
   height: 45vmin;
   overflow: visible !important;
+  transition: height 0.8s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .cord { stroke: var(--cord); }
@@ -660,14 +661,35 @@ body.is-on .portfolio-container {
     overflow-y: auto;
   }
 
+  /* حالة الإغلاق: الأباجورة بحجم كبير وواضح في منتصف الشاشة */
   .lamp-wrapper {
-    position: relative;
-    top: 0;
+    position: absolute;
+    top: 50%;
     left: 50% !important;
-    transform: translateX(-50%);
-    margin: 30px auto 10px;
+    transform: translate(-50%, -50%);
+    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    margin: 0;
+    z-index: 20;
   }
 
+  .lamp {
+    height: 55vmin;
+    transition: height 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  /* حالة الفتح (is-on): تصغر الأباجورة وتنتقل بسلاسة للزاوية العلوية اليسرى */
+  body.is-on .lamp-wrapper {
+    position: absolute;
+    top: 15px;
+    left: 15px !important;
+    transform: none;
+  }
+
+  body.is-on .lamp {
+    height: 15vmin;
+  }
+
+  /* البورتفوليو يظهر كاملاً أسفلها بمساحة مريحة للتصفح */
   .portfolio-container {
     position: relative;
     top: 0;
@@ -679,6 +701,11 @@ body.is-on .portfolio-container {
     max-height: none;
     margin: 20px auto;
     flex-direction: column;
+    transition: all 0.8s ease-in-out;
+  }
+
+  body.is-on .portfolio-container {
+    margin-top: calc(15vmin + 35px);
   }
 
   .profile-card {
